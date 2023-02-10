@@ -1,40 +1,56 @@
-﻿// See https://aka.ms/new-console-template for more information
+﻿using System.Diagnostics;
 
-var file = @"C:\Users\joel.kudiyirickal\Downloads\word_list.txt";
+var file = @"word_list.txt";
 var input = File.ReadAllText(file);
 
-var words = input.Split(new char[]{ ' ', '\r', '\n'}, StringSplitOptions.RemoveEmptyEntries);
+var words = input.Split(new char[] { ' ', '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
 
 var baseWord = "documenting";
 
-var word = "acrobat";
+Console.WriteLine($"{words.Length} words");
 
+var sw = Stopwatch.StartNew();
+var partialMatches = GetPartialAnagramWords(baseWord, words);
 
-var partialMatches = words.Where(w => IsSubSet(baseWord, w)).ToList();
-
-for (int i = 0; i < partialMatches.Count; i++)
+var matchCandidates = GetMatchCandidates(partialMatches);
+foreach (var (part1, part2) in matchCandidates)
 {
-  for (int j = i + 1; j < partialMatches.Count; j++)
-  {
-    if (IsAnagram(baseWord, partialMatches[i], partialMatches[j]))
+    var other = part1 + part2;
+    if (IsAnagram(baseWord, other))
     {
-      Console.WriteLine(partialMatches[i] + partialMatches[j]);
+        //Console.WriteLine(part1 + " " + part2);
     }
-  }
+}
+sw.Stop();
+Console.WriteLine($"{sw.ElapsedMilliseconds}ms ({sw.ElapsedTicks}t)");
+
+static IEnumerable<(string Part1, string Part2)> GetMatchCandidates(IReadOnlyList<string> partialMatches)
+{
+    for (var i = 0; i < partialMatches.Count; i++)
+    {
+        for (var j = i + 1; j < partialMatches.Count; j++)
+        {
+            yield return (partialMatches[i], partialMatches[j]);
+        }
+    }
 }
 
-bool IsAnagram(string word, string left, string right)
+bool IsAnagram(string word, string other)
 {
-  return left.Concat(right).OrderBy(e => e).SequenceEqual(word.OrderBy(e => e));
+    return other.OrderBy(e => e).SequenceEqual(word.OrderBy(e => e));
 }
 
 bool IsSubSet2(string baseWord, string subWord)
 {
-  return subWord.All(baseWord.Contains);
+    return subWord.All(baseWord.Contains);
 }
 
-bool IsSubSet(string baseWord, string subWord)
+static List<string> GetPartialAnagramWords(string baseWord, string[] words)
 {
-  return !subWord.Except(baseWord).Any();
-}
+    bool IsSubSet(string baseWord, string subWord)
+    {
+        return !subWord.Except(baseWord).Any();
+    }
 
+    return words.Where(w => IsSubSet(baseWord, w)).ToList();
+}

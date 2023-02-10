@@ -8,4 +8,10 @@
         <RootNamespace>FizzBuzz</RootNamespace>
     </PropertyGroup>
 
+    <ItemGroup>
+      <None Update="word_list.txt">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
 </Project>
