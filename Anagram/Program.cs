@@ -1,4 +1,7 @@
 ﻿using System.Diagnostics;
+using System.Numerics;
+using System.Runtime.Intrinsics;
+using System.Xml;
 
 var file = @"word_list.txt";
 var input = File.ReadAllText(file);
@@ -49,51 +52,81 @@ var duplicateLetters = new StackList<char>(listStorage);
 
 var results = new List<(string, string)>(1024);
 
+var baseWordLetterMaskVector = Vector256.Create(
+    baseWordLetterMask,
+    baseWordLetterMask,
+    baseWordLetterMask,
+    baseWordLetterMask,
+    baseWordLetterMask,
+    baseWordLetterMask,
+    baseWordLetterMask,
+    baseWordLetterMask);
+var letterMasksSpan = new ReadOnlySpan<int>(letterMasks);
 for (var i = 0; i < newWordCount; i++)
-for (var j = i + 1; j < newWordCount; j++)
 {
+    
+  // var iLetterMask = letterMasks[i];
+  // var iVector = Vector256.Create(iLetterMask, iLetterMask, iLetterMask, iLetterMask, iLetterMask, iLetterMask, iLetterMask, iLetterMask);
+  // for (var j = i + 1; j < newWordCount; j += 8)
+  int j = i + 1;
+  while(j < newWordCount)
+  {
+    var jSpan = letterMasksSpan.Slice(j);
+    
+    // var jVector = Vector256.Create(letterMasks, j);
+
     // Both words together use the same letters as the base word
-    if ((letterMasks[i] | letterMasks[j]) != baseWordLetterMask)
-        continue;
-
-    // The length of both words matches the length of the base word
-    if (lengths[i] + lengths[j] != baseWord.Length)
-        continue;
-
-    var left = words[backlinks[i]];
-    var right = words[backlinks[j]];
-
-    if (baseWordDuplicateLetters.Length == 0)
+    // var bitwiseOrResult = Vector256.BitwiseOr(iVector, jVector);
+    // if (!Vector256.EqualsAny(bitwiseOrResult, baseWordLetterMaskVector))
+    //   continue;
+    // for (int k = 0; k < 8; k++)
     {
-        // its a match
-        results.Add((left, right));
-    }
-    else
-    {
-        duplicateLetters.Length = 0;
+      // if (bitwiseOrResult.GetElement(k) == baseWordLetterMask)
+      {
+        //if ((letterMasks[i] | letterMasks[j]) != baseWordLetterMask)
+        //continue;
 
-        var combinedMask = baseWordLetterMask;
-        RecordDuplicateLetters(ref duplicateLetters, ref combinedMask, left.AsSpan());
-        RecordDuplicateLetters(ref duplicateLetters, ref combinedMask, right.AsSpan());
-
-        if (baseWordDuplicateLetters.Length == 1)
+        // The length of both words matches the length of the base word
+        if (lengths[i] + lengths[j] == baseWord.Length)
         {
-            if (duplicateLetters.Length == 1 && duplicateLetters[0] == baseWordDuplicateLetters[0])
+          var left = words[backlinks[i]];
+          var right = words[backlinks[j]];
+
+          if (baseWordDuplicateLetters.Length == 0)
+          {
+            // its a match
+            results.Add((left, right));
+          }
+          else
+          {
+            duplicateLetters.Length = 0;
+
+            var combinedMask = baseWordLetterMask;
+            RecordDuplicateLetters(ref duplicateLetters, ref combinedMask, left.AsSpan());
+            RecordDuplicateLetters(ref duplicateLetters, ref combinedMask, right.AsSpan());
+
+            if (baseWordDuplicateLetters.Length == 1)
             {
+              if (duplicateLetters.Length == 1 && duplicateLetters[0] == baseWordDuplicateLetters[0])
+              {
                 // its a match
                 results.Add((left, right));
+              }
             }
-        }
-        else
-        {
-            duplicateLetters.Sort();
-            if (baseWordDuplicateLetters.Span.SequenceEqual(duplicateLetters.Span))
+            else
             {
+              duplicateLetters.Sort();
+              if (baseWordDuplicateLetters.Span.SequenceEqual(duplicateLetters.Span))
+              {
                 // its a match
                 results.Add((left, right));
+              }
             }
+          }
         }
+      }
     }
+  }
 }
 
 sw.Stop();
@@ -104,6 +137,7 @@ foreach (var result in results)
 }
 
 Console.WriteLine($"{results.Count} matches");
+Console.WriteLine($"Reference: 12ms");
 Console.WriteLine($"{sw.ElapsedMilliseconds}ms ({sw.ElapsedTicks}t)");
 
 static int ConvertWordToLetterMask(ReadOnlySpan<char> value)

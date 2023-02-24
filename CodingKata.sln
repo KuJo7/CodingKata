@@ -2,6 +2,10 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Anagram", "Anagram\Anagram.csproj", "{81CF2C9C-2B5E-4CAB-B5D3-10A2F563D70A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RomanCalculator", "RomanCalculator\RomanCalculator.csproj", "{884D654C-D29E-461D-A5BC-DD484E0D8C6A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RomanCalculatorTest", "RomanCalculatorTest\RomanCalculatorTest.csproj", "{BAF523A3-9DFA-40AA-80EC-F1F5D0ADF945}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +16,13 @@ Global
 		{81CF2C9C-2B5E-4CAB-B5D3-10A2F563D70A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{81CF2C9C-2B5E-4CAB-B5D3-10A2F563D70A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{81CF2C9C-2B5E-4CAB-B5D3-10A2F563D70A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{884D654C-D29E-461D-A5BC-DD484E0D8C6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{884D654C-D29E-461D-A5BC-DD484E0D8C6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{884D654C-D29E-461D-A5BC-DD484E0D8C6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{884D654C-D29E-461D-A5BC-DD484E0D8C6A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BAF523A3-9DFA-40AA-80EC-F1F5D0ADF945}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BAF523A3-9DFA-40AA-80EC-F1F5D0ADF945}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BAF523A3-9DFA-40AA-80EC-F1F5D0ADF945}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BAF523A3-9DFA-40AA-80EC-F1F5D0ADF945}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
