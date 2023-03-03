@@ -11,6 +11,7 @@ public class RomanCalculatorTests
                                          new[] { "I", "I", "II" },
                                          new[] { "X", "X", "XX" },
                                          new[] { "X", "XI", "XXI" },
+                                         new[] { "X", "", "X" },
                                      };
   [Test]
   [TestCaseSource(nameof(TestCasesForAdd))]
@@ -29,4 +30,15 @@ public void AddInverse (string firstNumber, string secondNumber, string result)
   var romanCalculator = new RomanCalculator.RomanCalculator();
   Assert.That(romanCalculator.Add(secondNumber, firstNumber), Is.EqualTo(result));
 }
+
+[Test]
+[TestCase("IV", "IIII")]
+public void Simplify (string number, string result)
+{
+  var romanCalculator = new RomanCalculator.RomanCalculator();
+  Assert.That(romanCalculator.Simplify(number), Is.EqualTo(result));
+}
+
+
+
 }

@@ -4,6 +4,22 @@ public class RomanCalculator
 {
   public string Add (string firstNumber, string secondNumber)
   {
+    return Complexify(Combinify(Simplify(firstNumber), Simplify(secondNumber)));
+  }
+
+  public string Simplify(string number)
+  {
+
+    return number;
+  }
+
+  public string Complexify(string number)
+  {
+    return number;
+  }
+
+  public string Combinify(string firstNumber, string secondNumber)
+  {
     var digits = new char[firstNumber.Length + secondNumber.Length];
 
     int firstIndex = 0;
