@@ -1,5 +1,14 @@
 ﻿namespace RomanCalculator;
 
+using System.Text;
+
+// I = 1
+// V = 5
+// X = 10
+// L = 50
+// C = 100
+// D = 500
+// M = 1000
 public class RomanCalculator
 {
   public string Add(string firstNumber, string secondNumber)
@@ -9,40 +18,51 @@ public class RomanCalculator
 
   public string Simplify(string number)
   {
-    return number;
+    Console.WriteLine($"{nameof(Simplify)}: '{number}'");
+    return number
+      .Replace("IV", "IIII")
+      .Replace("IX", "VIIII")
+      .Replace("XL", "XXXX")
+      .Replace("XC", "LXXXX")
+      .Replace("CD", "CCCC")
+      .Replace("CM", "DCCCC");
   }
 
   public string Complexify(string number)
   {
-    return number;
+    Console.WriteLine($"{nameof(Complexify)}: '{number}'");
+    return number
+      .Replace("IIIII", "V")
+      .Replace("VV", "X")
+      .Replace("XXXXX", "L")
+      .Replace("LL", "C")
+      .Replace("CCCCC", "D")
+      .Replace("DD", "M")
+      .Replace("DCCCC", "CM")
+      .Replace("CCCC", "CD")
+      .Replace("LXXXX", "XC")
+      .Replace("XXXX", "XL")
+      .Replace("VIIII", "IX")
+      .Replace("IIII", "IV");
   }
 
   public string Combinify(string firstNumber, string secondNumber)
   {
-    var digits = new char[firstNumber.Length + secondNumber.Length];
+    Console.WriteLine($"{nameof(Combinify)}: '{firstNumber}' + '{secondNumber}'");
 
-    int firstIndex = 0;
-    int secondIndex = 0;
-    for (int i = 0; i < digits.Length; i++)
+    var combinedNumber = firstNumber + secondNumber;
+    var stringBuilder = new StringBuilder();
+
+    var mdclxvi = "MDCLXVI";
+    foreach (var c in mdclxvi)
     {
-      if (secondIndex >= secondNumber.Length
-          || firstIndex < firstNumber.Length && firstNumber[firstIndex] == secondNumber[secondIndex])
+      foreach (var otherLetter in combinedNumber)
       {
-        digits[i] = firstNumber[firstIndex];
-        firstIndex++;
-        //if (firstNumber[i] == secondNumber[i])
-        // {
-        //   digits[i + 1] = secondNumber[i];
-        //   i++;
-        // }
-      }
-      else
-      {
-        digits[i] = secondNumber[secondIndex];
-        secondIndex++;
+        if (c == otherLetter)
+          stringBuilder.Append(c);
       }
     }
 
-    return new string(digits);
+    return stringBuilder.ToString();
   }
 }
