@@ -2,14 +2,13 @@
 
 public class RomanCalculator
 {
-  public string Add (string firstNumber, string secondNumber)
+  public string Add(string firstNumber, string secondNumber)
   {
     return Complexify(Combinify(Simplify(firstNumber), Simplify(secondNumber)));
   }
 
   public string Simplify(string number)
   {
-
     return number;
   }
 
@@ -43,6 +42,7 @@ public class RomanCalculator
         secondIndex++;
       }
     }
+
     return new string(digits);
   }
 }
